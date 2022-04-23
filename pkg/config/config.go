@@ -64,6 +64,8 @@ func loadEnv(envSuffix string) {
 		if _, err := os.Stat(filepath); err == nil {
 			// 如 .env.testing 或 .env.stage
 			envPath = filepath
+		} else {
+			panic(err)
 		}
 	}
 
