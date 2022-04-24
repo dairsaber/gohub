@@ -1,9 +1,11 @@
 {
   "cSpell.words": [
     "Dialector",
+    "Gohub",
     "gonic",
     "gorm",
     "gormlogger",
-    "SQLDB"
+    "SQLDB",
+    "Syncer"
   ]
 }
