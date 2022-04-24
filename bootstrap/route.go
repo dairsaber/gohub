@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"gohub/app/http/middlewares"
 	"gohub/routes"
 	"net/http"
 	"strings"
@@ -22,7 +23,7 @@ func SetupRoute(router *gin.Engine) {
 }
 
 func registerGlobalMiddleware(router *gin.Engine) {
-	router.Use(gin.Logger(), gin.Recovery())
+	router.Use(middlewares.Logger(), gin.Recovery())
 }
 
 func setup404Handler(router *gin.Engine) {
