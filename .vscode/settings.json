@@ -5,6 +5,8 @@
     "gonic",
     "gorm",
     "gormlogger",
+    "govalidator",
+    "Signup",
     "SQLDB",
     "Syncer"
   ]

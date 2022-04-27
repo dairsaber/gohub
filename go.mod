@@ -6,6 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/spf13/cast v1.4.1
 	github.com/spf13/viper v1.11.0
+	github.com/thedevsaddam/govalidator v1.9.10
 	go.uber.org/zap v1.21.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gorm.io/driver/mysql v1.3.3
