@@ -1,5 +1,7 @@
 {
   "cSpell.words": [
+    "Aliyun",
+    "aliyunsmsclient",
     "Decr",
     "Dialector",
     "Gohub",
@@ -7,6 +9,7 @@
     "gorm",
     "gormlogger",
     "govalidator",
+    "Kenmy",
     "mojocn",
     "Signup",
     "SQLDB",
