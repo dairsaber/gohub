@@ -28,6 +28,7 @@ func init() {
 			"debug_expire_time": 10080,
 
 			// 非 production 环境，使用此 key 可跳过验证，方便测试
+			"testing_key": "captcha_skip_test",
 		}
 	})
 }

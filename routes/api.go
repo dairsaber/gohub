@@ -23,6 +23,7 @@ func RegisterApiRoutes(r *gin.Engine) {
 			// 发送验证码
 			vcc := new(auth.VerifyCodeController)
 			authGroup.POST("/verify-codes/captcha", vcc.ShowCaptcha)
+			authGroup.POST("/verify-codes/phone", vcc.SendUsingPhone)
 		}
 	}
 
