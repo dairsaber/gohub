@@ -57,9 +57,7 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 	_user.Create()
 
 	if _user.ID > 0 {
-		response.CreatedJSON(c, gin.H{
-			"data": _user,
-		})
+		response.CreatedJSON(c, _user)
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试~")
 	}
