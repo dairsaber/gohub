@@ -8,8 +8,10 @@ func init() {
 
 			// 默认是 Mailhog 的配置
 			"smtp": map[string]any{
-				"host":     config.Env("MAIL_HOST", "localhost"),
-				"port":     config.Env("MAIL_PORT", 1025),
+				"host": config.Env("MAIL_HOST", "localhost"),
+				// 本地的mail默认的1025被占用了 这样会造成mail在send时候无法正常返回,造成卡死,这边使用7788 比较保险
+				// MailHog  -smtp-bind-addr "0.0.0.0:7788"
+				"port":     config.Env("MAIL_PORT", 7788),
 				"username": config.Env("MAIL_USERNAME", ""),
 				"password": config.Env("MAIL_PASSWORD", ""),
 			},
