@@ -16,7 +16,7 @@ func getResponseBody(success bool, data any, msg string, errors ...any) gin.H {
 		responseBody["data"] = data
 	} else {
 		if len(errors) > 0 {
-			responseBody["errors"] = errors
+			responseBody["error"] = errors[0]
 		}
 	}
 
@@ -99,7 +99,7 @@ func Error(c *gin.Context, err error, msg ...string) {
 
 // ValidationError 处理表单验证不通过的错误，返回的 JSON 示例：
 //         {
-//             "errors": {
+//             "error": {
 //                 "phone": [
 //                     "手机号为必填项，参数名称 phone",
 //                     "手机号长度必须为 11 位的数字"
@@ -109,7 +109,7 @@ func Error(c *gin.Context, err error, msg ...string) {
 //         }
 func ValidationError(c *gin.Context, errors map[string][]string) {
 	c.AbortWithStatusJSON(http.StatusUnprocessableEntity,
-		getResponseBody(false, nil, "请求验证不通过，具体请查看 errors", errorsToSlice(errors)...))
+		getResponseBody(false, nil, "请求验证不通过，具体请查看 errors", errors))
 }
 
 // Unauthorized 响应 401，未传参 msg 时使用默认消息
@@ -127,18 +127,5 @@ func defaultMessage(defaultMsg string, msg ...string) (message string) {
 	} else {
 		message = defaultMsg
 	}
-	return
-}
-
-// 将errors 按field分组 返回error
-func errorsToSlice(errors map[string][]string) (errorSlice []any) {
-	for k, v := range errors {
-
-		errorSlice = append(errorSlice, map[string]any{
-			"field":         k,
-			"errorMessages": v,
-		})
-	}
-
 	return
 }

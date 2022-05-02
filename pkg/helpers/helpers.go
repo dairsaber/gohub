@@ -58,3 +58,22 @@ func RandomNumber(length int) string {
 	}
 	return string(b)
 }
+
+// 实现go版本的reduce 模仿js中的reduce方法
+func Reduce[T any, S any](arr []T, action func(S, T, int) S, initValue S) S {
+	result := initValue
+	for k, v := range arr {
+		result = action(result, v, k)
+	}
+
+	return result
+}
+
+// 实现go中的Map方法
+func Map[T any, S any](arr []T, action func(T, int) S) []S {
+	result := make([]S, len(arr))
+	for k, v := range arr {
+		result[k] = action(v, k)
+	}
+	return result
+}
