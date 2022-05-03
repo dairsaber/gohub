@@ -119,7 +119,7 @@ func SignupUsingEmail(data any, c *gin.Context) map[string][]string {
 	rules := govalidator.MapData{
 
 		"email":            []string{"required", "min:4", "max:30", "email", "not_exists:users,email"},
-		"name":             []string{"required", "alpha_num", "between:3,20", "not_exists:users,name"},
+		"username":         []string{"required", "alpha_num", "between:3,20", "not_exists:users,username"},
 		"password":         []string{"required", "min:6"},
 		"password_confirm": []string{"required"},
 		"verify_code":      []string{"required", "digits:6"},
@@ -134,7 +134,7 @@ func SignupUsingEmail(data any, c *gin.Context) map[string][]string {
 			"email:Email 格式不正确，请提供有效的邮箱地址",
 			"not_exists:Email 已被占用",
 		},
-		"name": []string{
+		"username": []string{
 			"required:用户名为必填项",
 			"alpha_num:用户名格式错误，只允许数字和英文",
 			"between:用户名长度需在 3~20 之间",
