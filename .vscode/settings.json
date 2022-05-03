@@ -9,6 +9,7 @@
     "gorm",
     "gormlogger",
     "govalidator",
+    "jwtpkg",
     "Kenmy",
     "mojocn",
     "Signup",
