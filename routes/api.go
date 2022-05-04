@@ -43,6 +43,7 @@ func RegisterApiRoutes(r *gin.Engine) {
 			// 重置密码
 			pwc := new(auth.PasswordController)
 			authGroup.PUT("/password-reset/using-phone", pwc.ResetByPhone)
+			authGroup.PUT("/password-reset/using-email", pwc.ResetByEmail)
 
 		}
 	}

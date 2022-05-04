@@ -79,7 +79,7 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context) {
 	// 2. 验证成功，创建数据
 	_user := user.User{
 		Username: request.Username,
-		Phone:    request.Email,
+		Email:    request.Email,
 		Password: request.Password,
 	}
 	_user.Create()
