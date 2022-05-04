@@ -19,7 +19,7 @@ func BcryptHash(password string) string {
 func BcryptCheck(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 
-	return err != nil
+	return err == nil
 }
 
 // BcryptIsHashed 判断字符串是否是哈希过的数据

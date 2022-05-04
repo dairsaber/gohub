@@ -13,7 +13,9 @@ func getResponseBody(success bool, data any, msg string, errors ...any) gin.H {
 	responseBody := gin.H{"success": success, "message": msg}
 
 	if success {
-		responseBody["data"] = data
+		if data != nil {
+			responseBody["data"] = data
+		}
 	} else {
 		if len(errors) > 0 {
 			responseBody["error"] = errors[0]

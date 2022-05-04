@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"gohub/app/http/middlewares"
+	"gohub/pkg/response"
 	"gohub/routes"
 	"net/http"
 	"strings"
@@ -37,10 +38,8 @@ func setup404Handler(router *gin.Engine) {
 			c.String(http.StatusNotFound, "页面返回 404")
 		} else {
 			// 默认返回 JSON
-			c.JSON(http.StatusNotFound, gin.H{
-				"error_code":    404,
-				"error_message": "路由未定义，请确认 url 和请求方法是否正确。",
-			})
+			response.Abort404(c, "路由未定义，请确认 url 和请求方法是否正确。")
+
 		}
 	})
 
