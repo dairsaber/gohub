@@ -2,6 +2,7 @@ package routes
 
 import (
 	"gohub/app/http/controllers/api/v1/auth"
+	"gohub/app/http/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,36 +15,39 @@ func RegisterApiRoutes(r *gin.Engine) {
 
 	{
 		authGroup := v1.Group("/auth")
+		// 限流中间件：每小时限流，作为参考 Github API 每小时最多 60 个请求（根据 IP）
+		// 测试时，可以调高一点
+		authGroup.Use(middlewares.LimitIP("1000-H"))
 		{
 			suc := new(auth.SignupController)
 			// 判断手机是否已注册
-			authGroup.POST("/signup/phone/exist", suc.IsPhoneExist)
+			authGroup.POST("/signup/phone/exist", middlewares.GuestJWT(), middlewares.LimitPerRoute("60-H"), suc.IsPhoneExist)
 			// 判断 Email 是否已注册
-			authGroup.POST("/signup/email/exist", suc.IsEmailExist)
+			authGroup.POST("/signup/email/exist", middlewares.GuestJWT(), middlewares.LimitPerRoute("60-H"), suc.IsEmailExist)
 			// 用手机注册
-			authGroup.POST("/signup/using-phone", suc.SignupUsingPhone)
+			authGroup.POST("/signup/using-phone", middlewares.GuestJWT(), suc.SignupUsingPhone)
 			// 用Email注册
-			authGroup.POST("/signup/using-email", suc.SignupUsingEmail)
+			authGroup.POST("/signup/using-email", middlewares.GuestJWT(), suc.SignupUsingEmail)
 
 			// 发送验证码
 			vcc := new(auth.VerifyCodeController)
-			authGroup.POST("/verify-codes/captcha", vcc.ShowCaptcha)
-			authGroup.POST("/verify-codes/phone", vcc.SendUsingPhone)
-			authGroup.POST("/verify-codes/email", vcc.SendUsingEmail)
+			authGroup.POST("/verify-codes/captcha", middlewares.LimitPerRoute("50-H"), vcc.ShowCaptcha)
+			authGroup.POST("/verify-codes/phone", middlewares.LimitPerRoute("20-H"), vcc.SendUsingPhone)
+			authGroup.POST("/verify-codes/email", middlewares.LimitPerRoute("20-H"), vcc.SendUsingEmail)
 
 			// 登录
 			lgc := new(auth.LoginController)
 			// 使用手机号，短信验证码进行登录
-			authGroup.POST("/login/using-phone", lgc.LoginByPhone)
+			authGroup.POST("/login/using-phone", middlewares.GuestJWT(), lgc.LoginByPhone)
 			// 支持手机号，Email 和 用户名
-			authGroup.POST("/login/using-password", lgc.LoginByPassword)
+			authGroup.POST("/login/using-password", middlewares.GuestJWT(), lgc.LoginByPassword)
 			// 刷新token
-			authGroup.POST("/login/refresh-token", lgc.RefreshToken)
+			authGroup.POST("/login/refresh-token", middlewares.AuthJWT(), lgc.RefreshToken)
 
-			// 重置密码
+			// 重置密码 这边是提供给用户自己重置密码的 要在未登录的情况下的重置
 			pwc := new(auth.PasswordController)
-			authGroup.PUT("/password-reset/using-phone", pwc.ResetByPhone)
-			authGroup.PUT("/password-reset/using-email", pwc.ResetByEmail)
+			authGroup.PUT("/password-reset/using-phone", middlewares.GuestJWT(), pwc.ResetByPhone)
+			authGroup.PUT("/password-reset/using-email", middlewares.GuestJWT(), pwc.ResetByEmail)
 
 		}
 	}
