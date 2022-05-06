@@ -16,5 +16,6 @@
     "SQLDB",
     "sredis",
     "Syncer"
-  ]
+  ],
+  "editor.fontFamily": "'JetBrains Mono','Microsoft YaHei UI'"
 }
