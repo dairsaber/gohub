@@ -3,6 +3,7 @@ package make
 import (
 	"embed"
 	"fmt"
+	"gohub/pkg/config"
 	"gohub/pkg/console"
 	"gohub/pkg/file"
 	"gohub/pkg/str"
@@ -41,6 +42,7 @@ import (
 //     "VariableName": "topicComment",
 //     "VariableNamePlural": "topicComments",
 //     "PackageName": "topic_comment"
+//     "AppName": "gohub"
 // }
 
 type Model struct {
@@ -50,6 +52,7 @@ type Model struct {
 	VariableName       string
 	VariableNamePlural string
 	PackageName        string
+	AppName            string
 }
 
 // stubsFS 方便我们后面打包这些 .stub 为后缀名的文件
@@ -71,6 +74,7 @@ func init() {
 		CmdMakeModel,
 		CmdMakeAPIController,
 		CmdMakeRequest,
+		CmdMakeMigration,
 	)
 }
 
@@ -83,6 +87,7 @@ func makeModelFromString(name string) Model {
 	model.VariableName = str.LowerCamel(model.StructName)
 	model.PackageName = str.Snake(model.StructName)
 	model.VariableNamePlural = str.LowerCamel(model.StructNamePlural)
+	model.AppName = str.Snake(config.GetString("app.name"))
 	return model
 }
 
@@ -115,6 +120,7 @@ func createFileFromStub(filePath string, stubName string, model Model, variables
 	replaces["{{StructNamePlural}}"] = model.StructNamePlural
 	replaces["{{PackageName}}"] = model.PackageName
 	replaces["{{TableName}}"] = model.TableName
+	replaces["{{AppName}}"] = model.AppName
 
 	// 对模板内容做变量替换
 	for search, replace := range replaces {
