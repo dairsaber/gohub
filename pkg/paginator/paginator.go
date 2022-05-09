@@ -16,12 +16,12 @@ import (
 
 // Paging 分页数据
 type Paging struct {
-	CurrentPage int    // 当前页
-	PerPage     int    // 每页条数
-	TotalPage   int    // 总页数
-	TotalCount  int64  // 总条数
-	NextPageURL string // 下一页的链接
-	PrevPageURL string // 上一页的链接
+	Current     int    `json:"current"`       // 当前页
+	PageSize    int    `json:"page_size"`     // 每页条数
+	TotalPage   int    `json:"total_page"`    // 总页数
+	TotalCount  int64  `json:"total_count"`   // 总条数
+	NextPageURL string `json:"next_page_url"` // 下一页的链接
+	PrevPageURL string `json:"prev_page_url"` // 上一页的链接
 }
 
 // Paginator 分页操作类
@@ -39,6 +39,20 @@ type Paginator struct {
 	ctx   *gin.Context // gin context，方便调用
 }
 
+// 分页返回的数据
+type PaginationData[T any] struct {
+	Pagination Paging `json:"pagination"`
+	Rows       []T    `json:"rows"`
+}
+
+func getPagenationData[T any](rows []T, pager Paging) PaginationData[T] {
+	return PaginationData[T]{
+		Pagination: pager,
+		Rows:       rows,
+	}
+
+}
+
 // Paginate 分页
 // c —— gin.context 用来获取分页的 URL 参数
 // db —— GORM 查询句柄，用以查询数据集和获取数据总数
@@ -51,12 +65,12 @@ type Paginator struct {
 //         paging := paginator.Paginate(
 //             c,
 //             query,
-//             &topics,
 //             app.APIURL(database.TableName(&Topic{})),
 //             perPage,
 //         )
-func Paginate(c *gin.Context, db *gorm.DB, data interface{}, baseURL string, perPage int) Paging {
+func Paginate[T any](c *gin.Context, db *gorm.DB, baseURL string, perPage int) PaginationData[T] {
 
+	rows := []T{}
 	// 初始化 Paginator 实例
 	p := &Paginator{
 		query: db,
@@ -69,23 +83,24 @@ func Paginate(c *gin.Context, db *gorm.DB, data interface{}, baseURL string, per
 							Order(p.Sort + " " + p.Order). // 排序
 							Limit(p.PerPage).
 							Offset(p.Offset).
-							Find(data).
+							Find(&rows).
 							Error
 
 	// 数据库出错
 	if err != nil {
 		logger.LogIf(err)
-		return Paging{}
+		return getPagenationData(rows, Paging{})
 	}
 
-	return Paging{
-		CurrentPage: p.Page,
-		PerPage:     p.PerPage,
-		TotalPage:   p.TotalPage,
-		TotalCount:  p.TotalCount,
-		NextPageURL: p.getNextPageURL(),
-		PrevPageURL: p.getPrevPageURL(),
-	}
+	return getPagenationData(rows,
+		Paging{
+			Current:     p.Page,
+			PageSize:    p.PerPage,
+			TotalPage:   p.TotalPage,
+			TotalCount:  p.TotalCount,
+			NextPageURL: p.getNextPageURL(),
+			PrevPageURL: p.getPrevPageURL(),
+		})
 }
 
 // 初始化分页必须用到的属性，基于这些属性查询数据库

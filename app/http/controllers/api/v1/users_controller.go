@@ -18,6 +18,6 @@ func (ctrl *UsersController) CurrentUser(c *gin.Context) {
 }
 
 func (ctrl *UsersController) Index(c *gin.Context) {
-	data := user.All()
-	response.Data(c, data)
+	userPagination := user.Paginate(c, 10)
+	response.Data(c, userPagination)
 }
