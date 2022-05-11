@@ -1,7 +1,11 @@
 package {{PackageName}}
 
 import (
+    "{{AppName}}/pkg/app"
     "{{AppName}}/pkg/database"
+    "{{AppName}}/pkg/paginator"
+
+    "github.com/gin-gonic/gin"
 )
 
 func Get(idStr string) ({{VariableName}} {{StructName}}) {
@@ -23,4 +27,16 @@ func IsExist(field, value string) bool {
     var count int64
     database.DB.Model({{StructName}}{}).Where(" = ?", field, value).Count(&count)
     return count > 0
+}
+
+
+// Paginate 分页内容
+func Paginate(c *gin.Context, perPage int) paginator.PaginationData[{{StructName}}] {
+	return paginator.Paginate[{{StructName}}](
+		c,
+		database.DB.Model({{StructName}}{}),
+		app.V1URL(database.TableName(&{{StructName}}{})),
+		perPage,
+	)
+
 }
