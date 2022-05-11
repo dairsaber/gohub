@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gohub/pkg/app"
 	"gohub/pkg/console"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -21,8 +22,10 @@ func runMakeMigration(cmd *cobra.Command, args []string) {
 	timeStr := app.TimenowInTimezone().Format("2006_01_02_150405")
 
 	model := makeModelFromString(args[0])
+	structName := strings.Split(args[0], "_")[1]
+	structModel := makeModelFromString(structName)
 	fileName := timeStr + "_" + model.PackageName
 	filePath := fmt.Sprintf("database/migrations/%s.go", fileName)
-	createFileFromStub(filePath, "migration", model, map[string]string{"{{FileName}}": fileName})
+	createFileFromStub(filePath, "migration", structModel, map[string]string{"{{FileName}}": fileName})
 	console.Success("Migration file created，after modify it, use `migrate up` to migrate database.")
 }
