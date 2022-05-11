@@ -19,38 +19,6 @@ func init() {
 	btsConfig.Initialize()
 }
 
-// func main() {
-// 	// 配置初始化，依赖命令行 --env 参数
-// 	var env string
-// 	flag.StringVar(&env, "env", "", "加载 .env 文件，如 --env=testing 加载的是 .env.testing 文件")
-// 	flag.Parse()
-// 	config.InitConfig(env)
-
-// 	// 初始化 Logger
-// 	bootstrap.SetupLogger()
-
-// 	// 设置gin的一些配置
-// 	bootstrap.SetupGin()
-
-// 	// new 一个 Gin Engine 实例
-// 	router := gin.New()
-
-// 	// 初始化 DB
-// 	bootstrap.SetupDB()
-
-// 	// 初始化 Redis
-// 	bootstrap.SetupRedis()
-
-// 	// 初始化路由绑定
-// 	bootstrap.SetupRoute(router)
-
-// 	err := router.Run(":" + config.Get("app.port"))
-
-// 	if err != nil {
-// 		fmt.Println(err.Error())
-// 	}
-// }
-
 func main() {
 	var rootCmd = &cobra.Command{
 		Use:   config.Get("app.name"),
