@@ -66,6 +66,8 @@ func RegisterApiRoutes(r *gin.Engine) {
 		{
 			// 创建分类
 			cgcGroup.POST("", middlewares.AuthJWT(), cgc.Store)
+			// 更新分类
+			cgcGroup.PUT("/:id", middlewares.AuthJWT(), cgc.Update)
 		}
 
 	}
