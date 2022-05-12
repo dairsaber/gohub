@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"gohub/app/models/category"
 	"gohub/app/models/user"
 	"gohub/app/requests"
 	"gohub/pkg/auth"
@@ -26,4 +27,21 @@ func (ctrl *UsersController) Index(c *gin.Context) {
 
 	userPagination := user.Paginate(c, 10)
 	response.Data(c, userPagination)
+}
+
+func (ctrl *CategoriesController) Delete(c *gin.Context) {
+
+	categoryModel := category.Get(c.Param("id"))
+	if categoryModel.ID == 0 {
+		response.Abort404(c)
+		return
+	}
+
+	rowsAffected := categoryModel.Delete()
+	if rowsAffected > 0 {
+		response.Success(c)
+		return
+	}
+
+	response.Abort500(c, "删除失败，请稍后尝试~")
 }
