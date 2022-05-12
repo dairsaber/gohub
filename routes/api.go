@@ -50,7 +50,6 @@ func RegisterApiRoutes(r *gin.Engine) {
 			pwc := new(auth.PasswordController)
 			authGroup.PUT("/password-reset/using-phone", middlewares.GuestJWT(), pwc.ResetByPhone)
 			authGroup.PUT("/password-reset/using-email", middlewares.GuestJWT(), pwc.ResetByEmail)
-
 		}
 
 		uc := new(controllers.UsersController)
@@ -60,6 +59,13 @@ func RegisterApiRoutes(r *gin.Engine) {
 		userGroup := v1.Group("/users")
 		{
 			userGroup.GET("", uc.Index)
+		}
+
+		cgc := new(controllers.CategoriesController)
+		cgcGroup := v1.Group("/categories")
+		{
+			// 创建分类
+			cgcGroup.POST("", middlewares.AuthJWT(), cgc.Store)
 		}
 
 	}
