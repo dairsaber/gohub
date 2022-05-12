@@ -61,6 +61,7 @@ func RegisterApiRoutes(r *gin.Engine) {
 			userGroup.GET("", uc.Index)
 		}
 
+		// 分类
 		cgc := new(controllers.CategoriesController)
 		cgcGroup := v1.Group("/categories")
 		{
@@ -74,6 +75,13 @@ func RegisterApiRoutes(r *gin.Engine) {
 			cgcGroup.DELETE("/:id", middlewares.AuthJWT(), cgc.Delete)
 		}
 
+		// 话题
+		tpc := new(controllers.TopicsController)
+		tpcGroup := v1.Group("/topics")
+		{
+			tpcGroup.POST("", middlewares.AuthJWT(), tpc.Store)
+			tpcGroup.GET("", middlewares.AuthJWT(), tpc.Index)
+		}
 	}
 
 }
