@@ -10,7 +10,7 @@ import (
 
 func init() {
 
-    type {{StructNamePlural}} struct {
+    type {{StructName}} struct {
         models.BaseModel
 
        // FIXME add custom field
@@ -20,11 +20,11 @@ func init() {
     }
 
     up := func(migrator gorm.Migrator, DB *sql.DB) {
-        migrator.AutoMigrate(&{{StructNamePlural}}{})
+        migrator.AutoMigrate(&{{StructName}}{})
     }
 
     down := func(migrator gorm.Migrator, DB *sql.DB) {
-        migrator.DropTable(&{{StructNamePlural}}{})
+        migrator.DropTable(&{{StructName}}{})
     }
 
     migrate.Add("{{FileName}}", up, down)
