@@ -64,6 +64,8 @@ func RegisterApiRoutes(r *gin.Engine) {
 		cgc := new(controllers.CategoriesController)
 		cgcGroup := v1.Group("/categories")
 		{
+			// 分页分类
+			cgcGroup.GET("", cgc.Index)
 			// 创建分类
 			cgcGroup.POST("", middlewares.AuthJWT(), cgc.Store)
 			// 更新分类
