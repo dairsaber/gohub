@@ -11,6 +11,9 @@ type User struct {
 	models.BaseModel
 
 	Username string `json:"username,omitempty"`
+
+	Avatar string `json:"avatar,omitempty"`
+
 	Email    string `json:"-"`
 	Phone    string `json:"-"`
 	Password string `json:"-"`
