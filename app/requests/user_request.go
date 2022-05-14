@@ -3,6 +3,7 @@ package requests
 import (
 	"gohub/app/requests/validators"
 	"gohub/pkg/auth"
+	"mime/multipart"
 
 	"github.com/gin-gonic/gin"
 	"github.com/thedevsaddam/govalidator"
@@ -107,4 +108,63 @@ func UserUpdatePhone(data interface{}, c *gin.Context) map[string][]string {
 	errs = validators.ValidateVerifyCode(_data.Phone, _data.VerifyCode, errs)
 
 	return errs
+}
+
+type UserUpdatePasswordRequest struct {
+	Password           string `valid:"password" json:"password,omitempty"`
+	NewPassword        string `valid:"new_password" json:"new_password,omitempty"`
+	NewPasswordConfirm string `valid:"new_password_confirm" json:"new_password_confirm,omitempty"`
+}
+
+func UserUpdatePassword(data interface{}, c *gin.Context) map[string][]string {
+	rules := govalidator.MapData{
+		"password":             []string{"required", "min:6"},
+		"new_password":         []string{"required", "min:6"},
+		"new_password_confirm": []string{"required", "min:6"},
+	}
+	messages := govalidator.MapData{
+		"password": []string{
+			"required:密码为必填项",
+			"min:密码长度需大于 6",
+		},
+		"new_password": []string{
+			"required:密码为必填项",
+			"min:密码长度需大于 6",
+		},
+		"new_password_confirm": []string{
+			"required:确认密码框为必填项",
+			"min:确认密码长度需大于 6",
+		},
+	}
+
+	// 确保 comfirm 密码正确
+	errs := validate(data, rules, messages)
+	_data := data.(*UserUpdatePasswordRequest)
+	errs = validators.ValidatePasswordConfirm(_data.NewPassword, _data.NewPasswordConfirm, errs)
+
+	return errs
+}
+
+type UserUpdateAvatarRequest struct {
+	Avatar *multipart.FileHeader `valid:"avatar" form:"avatar"`
+}
+
+func UserUpdateAvatar(data interface{}, c *gin.Context) map[string][]string {
+
+	rules := govalidator.MapData{
+		// size 的单位为 bytes
+		// - 1024 bytes 为 1kb
+		// - 1048576 bytes 为 1mb
+		// - 20971520 bytes 为 20mb
+		"file:avatar": []string{"ext:png,jpg,jpeg", "size:20971520", "required"},
+	}
+	messages := govalidator.MapData{
+		"file:avatar": []string{
+			"ext:ext头像只能上传 png, jpg, jpeg 任意一种的图片",
+			"size:头像文件最大不能超过 20MB",
+			"required:必须上传图片",
+		},
+	}
+
+	return validateFile(c, data, rules, messages)
 }

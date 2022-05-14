@@ -21,6 +21,9 @@ func SetupRoute(router *gin.Engine) {
 	// 配置 404 路由
 	setup404Handler(router)
 
+	// TODO 到时候将静态路径放在配置里面
+	router.StaticFS("/public/uploads", http.Dir("./public/uploads"))
+
 }
 
 func registerGlobalMiddleware(router *gin.Engine) {
