@@ -36,8 +36,8 @@ func main() {
 			bootstrap.SetupDB()
 			// 初始化 Redis
 			bootstrap.SetupRedis()
-
-			// TODO 初始化缓存
+			// 初始化缓存
+			bootstrap.SetupCache()
 
 		},
 	}
