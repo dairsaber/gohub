@@ -64,6 +64,8 @@ func RegisterApiRoutes(r *gin.Engine) {
 			usersGroup.PUT("", middlewares.AuthJWT(), uc.UpdateProfile)
 			// 更新邮箱
 			usersGroup.PUT("/email", middlewares.AuthJWT(), uc.UpdateEmail)
+			// 更新手机
+			usersGroup.PUT("/phone", middlewares.AuthJWT(), uc.UpdatePhone)
 		}
 
 		// 分类
