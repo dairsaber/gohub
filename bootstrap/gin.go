@@ -16,7 +16,7 @@ func SetupGin() {
 // 非 release 模式 gin 终端打印太多信息，干扰到我们程序中的 Log
 // 故此设置为 release，有特殊情况手动改为 debug 即可
 func setLoggerMode() {
-	logLevel := config.GetString("app.logLevel")
+	logLevel := config.GetString("app.log_level")
 
 	switch logLevel {
 	case "release":

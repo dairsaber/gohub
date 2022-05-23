@@ -16,7 +16,7 @@ func init() {
 			"debug": config.Env("APP_DEBUG", false),
 
 			// gin的logger级别 debug testing release
-			"logLevel": config.Env("APP_LOG_LEVEL", "debug"),
+			"log_level": config.Env("APP_LOG_LEVEL", "debug"),
 
 			// 应用服务端口
 			"port": config.Env("APP_PORT", "3000"),

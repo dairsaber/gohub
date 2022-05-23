@@ -62,9 +62,9 @@ func RandomNumber(length int) string {
 }
 
 // 实现go版本的reduce 模仿js中的reduce方法
-func Reduce[T any, S any](arr []T, action func(S, T, int) S, initValue S) S {
+func Reduce[T any, S any](arr *[]T, action func(S, T, int) S, initValue S) S {
 	result := initValue
-	for k, v := range arr {
+	for k, v := range *arr {
 		result = action(result, v, k)
 	}
 

@@ -2,11 +2,13 @@
   "cSpell.words": [
     "Aliyun",
     "aliyunsmsclient",
+    "casbin",
     "Decr",
     "Dialector",
     "Gohub",
     "gonic",
     "gorm",
+    "gormadapter",
     "gormlogger",
     "govalidator",
     "jwtpkg",
